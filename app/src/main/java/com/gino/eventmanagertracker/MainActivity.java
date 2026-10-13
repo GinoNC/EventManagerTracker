@@ -10,13 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView lvEvent;
-    TextView tvEmpty;
+    RecyclerView rvMain;
+    RecyclerView.LayoutManager rvLM;
+    RecyclerView.Adapter rvADA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +32,15 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // ===== initial
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Event Manager Tracker");
         }
 
-        lvEvent = findViewById(R.id.lvEvent);
-        tvEmpty = findViewById(R.id.tvEmpty);
+        EventDBHelper db = new EventDBHelper(this, "EventDB", null, 1);
+        rvMain = findViewById(R.id.rvMain);
+        rvLM = new LinearLayoutManager(this);
+        rvADA = new ItemAdapter(db);
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> {
@@ -46,13 +52,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-//        String[] output = new String[GlobalData.evtList.size()];
-//        for (int i = 0; i < GlobalData.evtList.size(); i++) {
-//            output[i] = GlobalData.evtList.get(i).name;
-//        }
-//
-//        ArrayAdapter ada = new ArrayAdapter(this, android.R.layout.simple_list_item_1, output);
-//        lvEvent.setAdapter(ada);
-//        lvEvent.setEmptyView(tvEmpty);
+        rvMain.setLayoutManager(rvLM);
+        rvMain.setAdapter(rvADA);
     }
 }

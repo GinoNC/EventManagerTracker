@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 
 public class DetailActivity extends AppCompatActivity {
 
-    EventDBHelper dbEvent = new EventDBHelper(this, "EventDB", null, 1);
+    EventDBHelper db = new EventDBHelper(this, "EventDB", null, 1);
 
     EventModel evtRecord = new EventModel();
     TextView tvID;
@@ -103,7 +103,7 @@ public class DetailActivity extends AppCompatActivity {
         Bundle era = getIntent().getExtras();
         if (era != null) {
             int id = era.getInt("evtID");
-            evtRecord = dbEvent.getSingle(id);
+            evtRecord = db.getSingle(id);
             tvID.setText("ID: " + id);
             etEventName.setText(evtRecord.eventName);
             etEventDate.setText(evtRecord.eventDate);
