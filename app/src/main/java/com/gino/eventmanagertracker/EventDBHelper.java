@@ -28,19 +28,6 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void addRecord(EventModel data) {
-        ContentValues val = new ContentValues();
-        val.put("evName", data.eventName);
-        val.put("evDate", data.eventDate);
-        val.put("evLocation", data.eventLocation);
-        val.put("evOrganiser", data.eventOrganiser);
-        val.put("evType", data.eventType);
-        val.put("evStatus", data.eventStatus);
-
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert("EventDB", null, val);
-        db.close();
-    }
 
     public ArrayList<EventModel> getList() {
         SQLiteDatabase db = getReadableDatabase();
@@ -85,12 +72,8 @@ public class EventDBHelper extends SQLiteOpenHelper {
             return null;
         }
     }
-    public EventModel getSingle(String eventName, Date eventDate) {
-        return null;
-    }
 
-    public void updateRecord(EventModel data) {
-        SQLiteDatabase db = getReadableDatabase();
+    public void addRecord(EventModel data) {
         ContentValues val = new ContentValues();
         val.put("evName", data.eventName);
         val.put("evDate", data.eventDate);
@@ -98,6 +81,22 @@ public class EventDBHelper extends SQLiteOpenHelper {
         val.put("evOrganiser", data.eventOrganiser);
         val.put("evType", data.eventType);
         val.put("evStatus", data.eventStatus);
+
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert("EventDB", null, val);
+        db.close();
+    }
+
+    public void updateRecord(EventModel data) {
+        ContentValues val = new ContentValues();
+        val.put("evName", data.eventName);
+        val.put("evDate", data.eventDate);
+        val.put("evLocation", data.eventLocation);
+        val.put("evOrganiser", data.eventOrganiser);
+        val.put("evType", data.eventType);
+        val.put("evStatus", data.eventStatus);
+
+        SQLiteDatabase db = getReadableDatabase();
         db.update("EventDB", val, "id = ?", new String[] { String.valueOf(data.id) });
         db.close();
     }

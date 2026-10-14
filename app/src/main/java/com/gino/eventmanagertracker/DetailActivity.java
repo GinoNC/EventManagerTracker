@@ -208,7 +208,13 @@ public class DetailActivity extends AppCompatActivity {
 
         EventModel evt = new EventModel(etEventName.getText().toString(), etEventDate.getText().toString(), etEventLocation.getText().toString(),
                 etEventOrganiser.getText().toString(), eType, spEventStatus.getSelectedItem().toString());
-        //GlobalData.evtList.add(evt);
+        if (evtRecord.id == 0) {
+            db.addRecord(evt);
+        }
+        else {
+            evt.id = evtRecord.id;
+            db.updateRecord(evt);
+        }
 
         finish();
     }

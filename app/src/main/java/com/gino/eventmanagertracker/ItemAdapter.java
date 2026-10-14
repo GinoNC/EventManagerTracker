@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvEventName, tvEventDate, tvEventLocation, tvEventOrganiser, tvEventType, tvEventStatus;
+        public Button btnDelete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -26,15 +28,30 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             tvEventOrganiser = itemView.findViewById(R.id.tvEventOrganiser);
             tvEventType = itemView.findViewById(R.id.tvEventType);
             tvEventStatus = itemView.findViewById(R.id.tvEventStatus);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
 
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 Context context = v.getContext();
-
                 EventModel evt = items.get(pos);
-                Intent it = new Intent(itemView.getContext(), DetailActivity.class);
+
+                Intent it = new Intent(context, DetailActivity.class);
                 it.putExtra("evtID", evt.id);
                 context.startActivity(it);
+            });
+
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition();
+                    Context context = v.getContext();
+                    EventModel evt = items.get(pos);
+
+                    EventDBHelper db = new EventDBHelper(context, "EventDB", null, 1);
+                    db.deleteRecord(evt.id);
+                    items.remove(pos);
+                    notifyItemRemoved(pos);
+                }
             });
         }
     }
