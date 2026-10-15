@@ -48,11 +48,6 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         // ===== initial
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Event Detail - Add");
-        }
-
         tvID = findViewById(R.id.tvID);
         etEventName = findViewById(R.id.etEventName);
         etEventDate = findViewById(R.id.etEventDate);
@@ -69,6 +64,52 @@ public class DetailActivity extends AppCompatActivity {
         Button btnClear = findViewById(R.id.btnClear);
         Button btnSave = findViewById(R.id.btnSave);
 
+        Bundle era = getIntent().getExtras();
+        if (era != null) {
+            int id = era.getInt("evtID");
+            evtRecord = db.getSingle(id);
+            tvID.setText("ID: " + id);
+            etEventName.setText(evtRecord.eventName);
+            etEventDate.setText(evtRecord.eventDate);
+            etEventLocation.setText(evtRecord.eventLocation);
+            etEventOrganiser.setText(evtRecord.eventOrganiser);
+            switch (evtRecord.eventType) {
+                case "Conference":
+                    rbEventTypeConference.setChecked(true);
+                    break;
+                case "Workshop":
+                    rbEventTypeWorkshop.setChecked(true);
+                    break;
+                case "Seminar":
+                    rbEventTypeSeminar.setChecked(true);
+                    break;
+                case "Social":
+                    rbEventTypeSocial.setChecked(true);
+                    break;
+                default:
+                    rbEventTypeOther.setChecked(true);
+                    break;
+            }
+            if (evtRecord.eventStatus.equals("Upcoming")) {
+                spEventStatus.setSelection(0);
+            }
+            else if (evtRecord.eventStatus.equals("Completed")) {
+                spEventStatus.setSelection(1);
+            }
+            else {
+                spEventStatus.setSelection(2);
+            }
+        }
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if (evtRecord.id == 0) {
+                getSupportActionBar().setTitle("Event Detail - Add");
+            } else {
+                getSupportActionBar().setTitle("Event Detail - Edit");
+            }
+        }
+
         ArrayAdapter<String> ada = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, statusOptions);
         ada.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spEventStatus.setAdapter(ada);
@@ -83,9 +124,6 @@ public class DetailActivity extends AppCompatActivity {
                 saveData();
             }
         });
-
-        // ===== load data
-        loadData();
     }
 
     @Override
@@ -98,43 +136,6 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void loadData() {
-        Bundle era = getIntent().getExtras();
-        if (era != null) {
-            int id = era.getInt("evtID");
-            evtRecord = db.getSingle(id);
-            tvID.setText("ID: " + id);
-            etEventName.setText(evtRecord.eventName);
-            etEventDate.setText(evtRecord.eventDate);
-            etEventLocation.setText(evtRecord.eventLocation);
-            etEventOrganiser.setText(evtRecord.eventOrganiser);
-            if (evtRecord.eventType.equals("Conference")) {
-                rbEventTypeConference.setChecked(true);
-            }
-            else if (evtRecord.eventType.equals("Workshop")) {
-                rbEventTypeWorkshop.setChecked(true);
-            }
-            else if (evtRecord.eventType.equals("Seminar")) {
-                rbEventTypeSeminar.setChecked(true);
-            }
-            else if (evtRecord.eventType.equals("Social")) {
-                rbEventTypeSocial.setChecked(true);
-            }
-            else {
-                rbEventTypeOther.setChecked(true);
-            }
-            if (evtRecord.eventStatus.equals("Upcoming")) {
-                spEventStatus.setSelection(0);
-            }
-            else if (evtRecord.eventStatus.equals("Completed")) {
-                spEventStatus.setSelection(1);
-            }
-            else {
-                spEventStatus.setSelection(2);
-            }
-        }
-    }
 
     private void inputClear() {
         etEventName.setText("");

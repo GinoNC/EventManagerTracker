@@ -31,14 +31,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ===== initial
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Event Manager Tracker");
-        }
-
         EventDBHelper db = new EventDBHelper(this, "EventDB", null, 1);
         rvMain = findViewById(R.id.rvMain);
         rvLM = new LinearLayoutManager(this);
         rvADA = new ItemAdapter(db);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Event Manager Tracker");
+        }
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> {
