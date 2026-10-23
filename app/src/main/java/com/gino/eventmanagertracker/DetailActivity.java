@@ -26,8 +26,9 @@ import java.text.SimpleDateFormat;
 public class DetailActivity extends AppCompatActivity {
 
     EventDBHelper db = new EventDBHelper(this, "EventDB", null, 1);
-
     EventModel evtRecord = new EventModel();
+
+    // ===== declare all components
     TextView tvID;
     EditText etEventName, etEventDate, etEventLocation, etEventOrganiser;
     RadioGroup rgEventType;
@@ -48,6 +49,7 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         // ===== initial
+        // ===== connect all components
         tvID = findViewById(R.id.tvID);
         etEventName = findViewById(R.id.etEventName);
         etEventDate = findViewById(R.id.etEventDate);
@@ -64,6 +66,11 @@ public class DetailActivity extends AppCompatActivity {
         Button btnClear = findViewById(R.id.btnClear);
         Button btnSave = findViewById(R.id.btnSave);
 
+        ArrayAdapter<String> ada = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, statusOptions);
+        ada.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spEventStatus.setAdapter(ada);
+
+        // ===== get data from db if event id passed-in
         Bundle era = getIntent().getExtras();
         if (era != null) {
             int id = era.getInt("evtID");
@@ -109,10 +116,6 @@ public class DetailActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("Event Detail - Edit");
             }
         }
-
-        ArrayAdapter<String> ada = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, statusOptions);
-        ada.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spEventStatus.setAdapter(ada);
 
         // ===== set listener
         btnClear.setOnClickListener(v -> {
@@ -206,9 +209,9 @@ public class DetailActivity extends AppCompatActivity {
             eType = "Other";
         }
 
-
         EventModel evt = new EventModel(etEventName.getText().toString(), etEventDate.getText().toString(), etEventLocation.getText().toString(),
                 etEventOrganiser.getText().toString(), eType, spEventStatus.getSelectedItem().toString());
+
         if (evtRecord.id == 0) {
             db.addRecord(evt);
         }

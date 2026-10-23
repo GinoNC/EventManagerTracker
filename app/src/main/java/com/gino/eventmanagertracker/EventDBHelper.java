@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class EventDBHelper extends SQLiteOpenHelper {
@@ -35,7 +34,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
         Cursor cur = db.rawQuery(sql, null);
 
         ArrayList<EventModel> result = new ArrayList<>();
-        if (cur.getCount() > 0) {
+        if (cur.moveToFirst()) {
             do {
                 EventModel evt = new EventModel();
                 evt.id = cur.getInt(0);
@@ -48,6 +47,7 @@ public class EventDBHelper extends SQLiteOpenHelper {
                 result.add(evt);
             } while (cur.moveToNext());
         }
+        cur.close();
 
         return result;
     }
@@ -57,8 +57,9 @@ public class EventDBHelper extends SQLiteOpenHelper {
         String sql = "Select * From EventDB Where id = " + String.valueOf(id);
         Cursor cur = db.rawQuery(sql, null);
 
-        if (cur.getCount() > 0) {
-            EventModel evt = new EventModel();
+        EventModel evt = null;
+        if (cur.moveToFirst()) {
+            evt = new EventModel();
             evt.id = cur.getInt(0);
             evt.eventName = cur.getString(1);
             evt.eventDate = cur.getString(2);
@@ -66,11 +67,20 @@ public class EventDBHelper extends SQLiteOpenHelper {
             evt.eventOrganiser = cur.getString(4);
             evt.eventType = cur.getString(5);
             evt.eventStatus = cur.getString(6);
-            return evt;
         }
-        else {
-            return null;
-        }
+        cur.close();
+
+        return evt;
+    }
+
+    public int getSize() {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "Select * From EventDB";
+        Cursor cur = db.rawQuery(sql, null);
+
+        int result = cur.getCount();
+        cur.close();
+        return result;
     }
 
     public void addRecord(EventModel data) {

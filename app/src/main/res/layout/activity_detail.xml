@@ -30,6 +30,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:text="ID: ---"
+                android:textColor="@color/design_default_color_error"
                 android:textSize="20sp" />
 
             <EditText
