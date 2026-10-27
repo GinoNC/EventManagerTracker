@@ -150,11 +150,11 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private Boolean inputValidation() {
-        if (etEventName.getText().toString().isEmpty()) {
+        if (etEventName.getText().toString().trim().isEmpty()) {
             showErrorMessage("Please input event name");
             return false;
         }
-        if (etEventDate.getText().toString().isEmpty()) {
+        if (etEventDate.getText().toString().trim().isEmpty()) {
             showErrorMessage("Please input event date");
             return false;
         }
@@ -163,17 +163,17 @@ public class DetailActivity extends AppCompatActivity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             sdf.setLenient(false);
             try {
-                sdf.parse(etEventDate.getText().toString());
+                sdf.parse(etEventDate.getText().toString().trim());
             } catch (ParseException e) {
                 showErrorMessage("Invalid date format");
                 return false;
             }
         }
-        if (etEventLocation.getText().toString().isEmpty()) {
+        if (etEventLocation.getText().toString().trim().isEmpty()) {
             showErrorMessage("Please input event location");
             return false;
         }
-        if (etEventOrganiser.getText().toString().isEmpty()) {
+        if (etEventOrganiser.getText().toString().trim().isEmpty()) {
             showErrorMessage("Please input event organiser");
             return false;
         }
