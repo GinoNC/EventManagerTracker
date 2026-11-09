@@ -182,7 +182,6 @@ public class DetailActivity extends AppCompatActivity {
             return false;
         }
 
-
         return true;
     }
     private void showErrorMessage(String msg) {
