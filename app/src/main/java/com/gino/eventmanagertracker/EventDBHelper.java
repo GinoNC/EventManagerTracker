@@ -106,13 +106,13 @@ public class EventDBHelper extends SQLiteOpenHelper {
         val.put("evType", data.eventType);
         val.put("evStatus", data.eventStatus);
 
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         db.update("EventDB", val, "id = ?", new String[] { String.valueOf(data.id) });
         db.close();
     }
 
     public void deleteRecord(int id) {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         db.delete("EventDB", "id = ?", new String[] { String.valueOf(id) });
         db.close();
     }
